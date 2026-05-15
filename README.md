@@ -9,11 +9,11 @@ Copy and paste the command below each preview into the terminal. <br> It works o
 
 ## Themes
 
-### Mint defaults all
+### Mint
 
 CAPTURA
 
 ```
-sudo curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes | sh -s -- white-sur
+sudo curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes | sh -s -- mint
 ```
 About this style
