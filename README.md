@@ -5,7 +5,7 @@ Simplify the complete installation of a theme with all its variations on the Cin
 
 Copy and paste the command below each preview into the terminal. <br> It works on all Linux distributions and BDS systems.
 
----
+<br>
 
 ## Themes
 
