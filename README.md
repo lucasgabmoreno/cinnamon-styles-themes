@@ -17,6 +17,6 @@ Copy and paste the command below each preview into the terminal. <br> It works o
 CAPTURA
 
 ```
-sudo curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sh -s -- mint
+curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sudo sh -s -- mint
 ```
 [About](/styles/mint/ABOUT.md)
