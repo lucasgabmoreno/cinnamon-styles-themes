@@ -2,19 +2,18 @@
 
 # ==============================================================================
 # Script Name:  cinnamon-styles-themes.sh
-# Description:  Downloads and installs Cinnamon styles, themes, and icons.
-#               Fix: Improved directory detection and extraction paths.
-# Compatibility: POSIX-compliant sh (Linux and FreeBSD)
+# Version:      5.0 (Directory First Logic)
+# Description:  1. Unpack | 2. Create Paths | 3. Move Files
 # ==============================================================================
 
-# Ensure the script is running with root privileges
+# 1. Privileges check
 if [ "$(id -u)" -ne 0 ]; then
-    echo "Error: This script must be run as root. Use: curl ... | sudo sh -s -- arg" >&2
+    echo "Error: High privileges required. Use: curl ... | sudo sh -s -- arg" >&2
     exit 1
 fi
 
 if [ -z "$1" ]; then
-    echo "Error: Missing argument (theme name)." >&2
+    echo "Error: Argument required (e.g., mint)." >&2
     exit 1
 fi
 
@@ -22,54 +21,63 @@ THEME_NAME="$1"
 REPO_URL="https://github.com/lucasgabmoreno/cinnamon-styles-themes/releases/download"
 DOWNLOAD_URL="${REPO_URL}/${THEME_NAME}/${THEME_NAME}.tar.xz"
 
-# Create temporary directory
-TMP_DIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'cinnamon_install')
+# 2. Setup temporary workspace
+TMP_DIR="/tmp/cinnamon_work"
+rm -rf "$TMP_DIR"
+mkdir -p "$TMP_DIR"
 trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
 
-echo "Downloading ${THEME_NAME}..."
+echo "--> Downloading package..."
 if command -v curl >/dev/null 2>&1; then
-    curl -sL -o "${TMP_DIR}/pkg.tar.xz" "$DOWNLOAD_URL"
-elif command -v fetch >/dev/null 2>&1; then
-    fetch -q -o "${TMP_DIR}/pkg.tar.xz" "$DOWNLOAD_URL"
+    curl -sL -o "$TMP_DIR/pkg.tar.xz" "$DOWNLOAD_URL"
+else
+    fetch -q -o "$TMP_DIR/pkg.tar.xz" "$DOWNLOAD_URL"
 fi
 
-if [ ! -s "${TMP_DIR}/pkg.tar.xz" ]; then
+if [ ! -s "$TMP_DIR/pkg.tar.xz" ]; then
     echo "Error: Download failed." >&2
     exit 1
 fi
 
-echo "Extracting..."
-# Extracting without preserving absolute paths to avoid issues
-tar -xf "${TMP_DIR}/pkg.tar.xz" -C "$TMP_DIR"
+# 3. Step 1: Unpack everything to the temporary folder
+echo "--> Unpacking..."
+tar -xf "$TMP_DIR/pkg.tar.xz" -C "$TMP_DIR"
 
-# Target directories to check and move
-# We check both "usr/..." and "./usr/..." structures
-for base_path in "usr/share/cinnamon/styles.d" "usr/local/share/themes" "usr/local/share/icons"; do
-    
-    SOURCE_DIR="${TMP_DIR}/${base_path}"
-    TARGET_DIR="/${base_path}"
+# 4. Step 2 & 3: Create system directories and then move files
+# We define exactly what we are looking for and where it should go
+deploy() {
+    folder_name="$1"     # Name inside the tar
+    sys_path="$2"        # Absolute path in system
 
-    if [ -d "$SOURCE_DIR" ]; then
-        echo "Found: ${base_path}"
+    # Look for the folder anywhere inside the unpacked content
+    src=$(find "$TMP_DIR" -type d -name "$folder_name" | head -n 1)
+
+    if [ -n "$src" ]; then
+        echo "--> Installing $folder_name to $sys_path"
         
-        # Create system directory if it doesn't exist
-        if [ ! -d "$TARGET_DIR" ]; then
-            echo "Creating ${TARGET_DIR}..."
-            mkdir -p "$TARGET_DIR"
-        fi
-
-        # Copy files
-        echo "Installing to ${TARGET_DIR}..."
-        cp -Rp "${SOURCE_DIR}/." "$TARGET_DIR/"
+        # Ensure the parent directory exists
+        mkdir -p "$sys_path"
+        
+        # Copy the content (files/subfolders) from temp to system
+        cp -Rp "$src/." "$sys_path/"
+        
+        # Standardize permissions for Cinnamon
+        chmod -R 755 "$sys_path"
     else
-        echo "Note: ${base_path} not found in this package. Skipping."
+        echo "--> Note: $folder_name not found in the package."
     fi
-done
+}
 
-# Force Cinnamon to see the new styles.d (BSD/Linux compatible)
-if pgrep cinnamon >/dev/null 2>&1; then
-    echo "Reloading Cinnamon to register new styles..."
+# --- Execution ---
+# Here we force the creation and moving
+deploy "styles.d" "/usr/share/cinnamon/styles.d"
+deploy "themes"   "/usr/local/share/themes"
+deploy "icons"    "/usr/local/share/icons"
+
+# 5. Final Refresh
+if pgrep -x "cinnamon" >/dev/null 2>&1; then
+    echo "--> Refreshing Cinnamon Shell..."
     pkill -HUP cinnamon 2>/dev/null
 fi
 
-echo "Done! Theme '${THEME_NAME}' installed."
+echo "Done. Paths checked and files deployed."
