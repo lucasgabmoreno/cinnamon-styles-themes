@@ -19,4 +19,4 @@ CAPTURA
 ```
 curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sudo sh -s -- mint
 ```
-[About](/styles/mint/ABOUT.md)
+[About](/styles/mint/README.md)
