@@ -6,7 +6,7 @@ Simplify the complete installation of a theme with all its variations on the Cin
 
 <img src="/img/styles.png" style="width:450px">
 
-Copy and paste the command below each preview into the terminal. <br> It works on all Linux distributions and BDS systems.
+To install, copy and paste the command below each preview into the terminal. <br> It works on all Linux distributions and BDS systems.
 
 <br>
 
