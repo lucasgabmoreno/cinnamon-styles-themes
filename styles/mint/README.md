@@ -7,8 +7,18 @@
 PREVIEW
 
 This is a backup of the styles installed by default in [LMDE7](https://linuxmint.com/download_lmde.php)
+ 
+## Install
+```
+curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sudo sh -s -- mint
+```
+## Uninstall
+```
+curl -sSL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/main/styles/mint/uninstall.sh | /bin/sh
+```
 
-This style includes:
+## Includes
+
 * Themes:
   * Adwaita*
   * Default
@@ -33,15 +43,6 @@ This style includes:
   * Mint-Y*
   * Papirus*
   * ubuntu-mono-*
- 
-## Install
-```
-curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sudo sh -s -- mint
-```
-## Uninstall
-```
-curl -sSL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/main/styles/mint/uninstall.sh | /bin/sh
-```
 
 ## Resources
 * [LMDE7](https://linuxmint.com/download_lmde.php)
