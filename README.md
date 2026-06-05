@@ -14,7 +14,7 @@ Copy and paste the command below each preview into the terminal. <br> It works o
 
 ### Mint
 
-CAPTURA
+<img src="styles/mint/screenshot.jpg" style="width:450px">
 
 ```
 curl -sL https://raw.githubusercontent.com/lucasgabmoreno/cinnamon-styles-themes/refs/heads/main/cinnamon-styles-themes.sh | sudo sh -s -- mint
