@@ -4,7 +4,7 @@
 
 ### Mint
 
-PREVIEW
+<img src="screenshot.jpg" style="width:450px">
 
 This is a backup of the styles installed by default in [LMDE7](https://linuxmint.com/download_lmde.php)
  
